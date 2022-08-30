@@ -1,11 +1,12 @@
 ﻿using System.Collections;
+using Spawning;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class SpawnManager : MonoBehaviour
 {
-    [SerializeField] private GameObject _enemyPrefab, _enemyContainer;
-
+    [SerializeField] private EnemySpawner _enemySpawner;
+    [SerializeField] private PowerUpSpawner _powerUpSpawner;
     [SerializeField] private bool _stopSpawning = true;
     [SerializeField] private GameObject[] _powerUps = new GameObject[3];
     private Asteroid _asteroid;
@@ -21,6 +22,7 @@ public class SpawnManager : MonoBehaviour
 
     private void OnDisable()
     {
+        StopAllCoroutines();
         _player.OnPlayerDeath -= OnPlayerDeath;
         _asteroid.OnStartSpawning -= StartSpawning;
 
@@ -28,23 +30,25 @@ public class SpawnManager : MonoBehaviour
     private void OnPlayerDeath()
     {
         _stopSpawning = true;
+        StopAllCoroutines();
     }
 
     private void StartSpawning()
     {
-        _stopSpawning = false;
-        StartCoroutine(SpawnRoutine());
-        StartCoroutine(PowerUpRoutine());
+        if (_stopSpawning)
+        {
+            _stopSpawning = false;
+            StartCoroutine(SpawnRoutine());
+            StartCoroutine(PowerUpRoutine());
+        }
     }
 
     private IEnumerator SpawnRoutine()
     {
         while (!_stopSpawning)
         {
-            Vector3 posToSpawn = new Vector3(Random.Range(-8, 8), 6, 0);
-            GameObject newEnemy = Instantiate(_enemyPrefab, posToSpawn, Quaternion.identity);
-            newEnemy.transform.parent = _enemyContainer.transform;
-            yield return new WaitForSeconds(5f);
+            _enemySpawner.enemyPool.Get();
+            yield return new WaitForSeconds(_enemySpawner.SpawnRate);
         }
     }
 
@@ -52,9 +56,8 @@ public class SpawnManager : MonoBehaviour
     {
         while (!_stopSpawning)
         {
-            Vector3 posToSpawn = new Vector3(Random.Range(-8, 8), 6, 0);
-            Instantiate(_powerUps[Random.Range(0,3)], posToSpawn, Quaternion.identity);
-            yield return new WaitForSeconds(Random.Range(5, 7));
+            _powerUpSpawner.powerUpPool.Get();
+            yield return new WaitForSeconds(_powerUpSpawner.SpawnRate);
         }
     }
 }

@@ -1,11 +1,18 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
+using UnityEngine.Pool;
 
 public class PowerUp : MonoBehaviour
 {
     [SerializeField] private float _speed = 2.5f;
     [SerializeField] private int _powerUpID;
     [SerializeField] private IntUpdateChannel _powerUpChannel;
+    private IObjectPool<PowerUp> _powerUpPool;
 
+    public void SetPool(IObjectPool<PowerUp> pool)
+    {
+        _powerUpPool = pool;
+    }
     private void Update()
     {
        Movement();
@@ -13,11 +20,7 @@ public class PowerUp : MonoBehaviour
 
     private void Movement()
     {
-        transform.Translate(Vector3.down * (_speed * Time.deltaTime));
-        if (transform.position.y < -6)
-        {
-            Destroy(gameObject);
-        }
+        transform.MoveDown(_speed);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -25,7 +28,13 @@ public class PowerUp : MonoBehaviour
         if(other.CompareTag("Player"))
         {
             _powerUpChannel.CallIntUpdate(_powerUpID);
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
+    }
+
+    private void OnBecameInvisible()
+    {
+        _powerUpPool.Release(this);
+        _powerUpPool.Clear();
     }
 }

@@ -6,8 +6,7 @@ public class EnemyLaser : Laser
 
     protected override void Update()
     {
-        //if (!_isVisible) return;
-        _transform.Translate(Vector3.down * (_speed * Time.deltaTime));
+        _transform.MoveDown(_speed);
         if (_transform.position.y < _destroyBoundary)
         {
             gameObject.SetActive(false);

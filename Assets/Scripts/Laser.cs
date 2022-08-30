@@ -11,8 +11,6 @@ public class Laser : MonoBehaviour
 
     protected IObjectPool<Laser> _laserPool;
 
-    protected bool _isVisible = false;
-
     private void Start()
     {
         _transform = transform;
@@ -20,7 +18,7 @@ public class Laser : MonoBehaviour
 
     protected virtual void Update()
     {
-        _transform.Translate(Vector3.up * (_speed * Time.deltaTime));
+        _transform.MoveUp(_speed);
         if(_transform.position.y > _destroyBoundary)
         {
             gameObject.SetActive(false);
@@ -37,17 +35,11 @@ public class Laser : MonoBehaviour
 
     public void SetPool(IObjectPool<Laser> pool)
     {
-        _laserPool = pool;S
+        _laserPool = pool;
     }
-
-    protected void OnBecameVisible()
-    {
-        _isVisible = true;
-    }
-
+    
     protected void OnBecameInvisible()
     {
-        _isVisible = false;
-       _laserPool.Release(this);
+        _laserPool.Release(this);
     }
 }

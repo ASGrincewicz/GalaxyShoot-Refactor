@@ -258,6 +258,8 @@ GameObject:
   m_Component:
   - component: {fileID: 531470420}
   - component: {fileID: 531470419}
+  - component: {fileID: 531470421}
+  - component: {fileID: 531470422}
   m_Layer: 0
   m_Name: Spawn_Manager
   m_TagString: Untagged
@@ -277,9 +279,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a637157554e886949b529fee6d0a3adb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enemyPrefab: {fileID: 2839233689000840284, guid: 99d909ed8a91b4c43979d8dc37fecf54,
-    type: 3}
-  _enemyContainer: {fileID: 503967270}
+  _enemySpawner: {fileID: 531470421}
+  _powerUpSpawner: {fileID: 531470422}
   _stopSpawning: 1
   _powerUps:
   - {fileID: 5906124128423113161, guid: c3ad5e28dc863e04399aec0b2afca66b, type: 3}
@@ -298,9 +299,48 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 503967271}
+  - {fileID: 1012499328}
+  - {fileID: 1787817720}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &531470421
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 531470418}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cf766d1a1884c58a8bc76edb88419e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enemyToSpawn: {fileID: 5428831803532719266, guid: 99d909ed8a91b4c43979d8dc37fecf54,
+    type: 3}
+  _enemyContainer: {fileID: 503967271}
+  _spawnRate: 2
+  _maxPoolSize: 5
+--- !u!114 &531470422
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 531470418}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 773968d1a91d4b77b6045adb24dcdc05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _availablePowerUps:
+  - {fileID: 9021392427003647517, guid: 6ebe435012275d24d80f95d01835ad6b, type: 3}
+  - {fileID: 9164265301882942034, guid: b3ee04fc4826508488244a1ccdd7e0a5, type: 3}
+  - {fileID: 5906124128423113162, guid: c3ad5e28dc863e04399aec0b2afca66b, type: 3}
+  _powerUpToSpawn: {fileID: 0}
+  _powerUpContainer: {fileID: 1012499328}
+  _spawnRate: 5
+  _maxPoolSize: 5
 --- !u!850595691 &831697050
 LightingSettings:
   m_ObjectHideFlags: 0
@@ -411,6 +451,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1012499327
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1012499328}
+  m_Layer: 0
+  m_Name: PowerUp_Container
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1012499328
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1012499327}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 531470420}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1038395701
 GameObject:
@@ -1074,6 +1145,37 @@ MonoBehaviour:
   _restartText: {fileID: 1873332744}
   _scoreUpdateChannel: {fileID: 11400000, guid: 840f57dc5625eb9478826f37a0026fe9,
     type: 2}
+--- !u!1 &1787817719
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1787817720}
+  m_Layer: 0
+  m_Name: Laser_Container
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1787817720
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1787817719}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 531470420}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1788036968
 GameObject:
   m_ObjectHideFlags: 0

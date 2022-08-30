@@ -34,6 +34,16 @@ public static class ExtensionMethods
         transform.Translate(Vector3.left * (speed * Time.deltaTime));
     }
 
+    public static void MoveUp(this Transform transform, float speed)
+    {
+        transform.Translate(Vector3.up * (speed * Time.deltaTime));
+    }
+    
+    public static void MoveDown(this Transform transform, float speed)
+    {
+        transform.Translate(Vector3.down * (speed * Time.deltaTime));
+    }
+
     public static void AddImpulseForce(this Rigidbody2D rigidbody2D, Vector3 force)
     {
         rigidbody2D.AddForce(force, ForceMode2D.Impulse);

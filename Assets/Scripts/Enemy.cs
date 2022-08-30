@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Pool;
 
 public class Enemy : MonoBehaviour
 {
@@ -6,15 +7,16 @@ public class Enemy : MonoBehaviour
     [SerializeField] private UpdateChannel _damageChannel;
     [SerializeField] private int _pointValue = 10;
     [SerializeField] private float _speed = 4f;
+    [SerializeField] private float _defaultSpeed = 4.0f;
     private Animator _anim;
     private AudioSource _audio;
     [SerializeField] private AudioClip _explosionClip;
 
     private readonly int _animatorTrigger = Animator.StringToHash("OnEnemyDeath");
+    private IObjectPool<Enemy> _enemyPool;
 
     private void Start()
     {
-        
         if (!TryGetComponent(out _anim))
         {
             Debug.LogError("Animator is NULL!");
@@ -31,13 +33,13 @@ public class Enemy : MonoBehaviour
        Movement();
     }
 
+    public void SetPool(IObjectPool<Enemy> pool)
+    {
+        _enemyPool = pool;
+    }
     private void Movement()
     {
-        transform.Translate(Vector3.down * (_speed * Time.deltaTime));
-        if(transform.position.y < -6)
-        {
-            transform.position = new Vector3(Random.Range(-8, 8), 5, 0);
-        }
+        transform.MoveDown(_speed);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -47,14 +49,30 @@ public class Enemy : MonoBehaviour
             _anim.SetTrigger(_animatorTrigger);
             _audio.PlayOneShot(_explosionClip);
             _speed = 0;
-            Destroy(GetComponent<Collider2D>());
+            TryGetComponent(out Collider2D col);
+            col.enabled = false;
             _scoreUpdateChannel.CallIntUpdate(_pointValue);
-            Destroy(gameObject,2.3f);
+            gameObject.SetActive(false);
            
             if (other.CompareTag("Player"))
             {
                _damageChannel.CallUpdate();
             }
         }
+    }
+
+    private void OnBecameVisible()
+    {
+        if (TryGetComponent(out Collider2D col))
+        {
+            col.enabled = true;
+        }
+
+        _speed = _defaultSpeed;
+    }
+
+    private void OnBecameInvisible()
+    {
+        _enemyPool.Release(this);
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
@@ -9,9 +8,9 @@ public class LaserLauncher : MonoBehaviour
     [SerializeField] private bool _isAI = false;
     [SerializeField] private Laser _pooledLaser;
     [SerializeField] private Laser _pooledTripleShotLaser;
+    [SerializeField] private Transform _laserContainer;
     [SerializeField] private int _maxPoolSize = 10;
     [SerializeField] private float _fireRate = 0.5f;
-    //[SerializeField] private Vector3 _laserOffset = new Vector3(0,0.5f,0);
     private IObjectPool<Laser> _objectPool;
     private float _canFire = -1.0f;
     private Player _player;
@@ -21,6 +20,7 @@ public class LaserLauncher : MonoBehaviour
     {
         _objectPool = new ObjectPool<Laser>(CreateObject,OnGet,OnRelease,OnLaserDestroy,maxSize: _maxPoolSize);
         TryGetComponent(out _player);
+        _laserContainer = GameObject.Find("Laser_Container").transform;
     }
 
     private void OnDisable()
@@ -46,7 +46,7 @@ public class LaserLauncher : MonoBehaviour
 
     private Laser CreateObject()
     {
-       Laser obj = Instantiate(_pooledLaser);
+       Laser obj = Instantiate(_pooledLaser, _laserContainer);
         
         obj.SetPool(_objectPool);
         _createdLasers.Add(obj.gameObject);
@@ -78,7 +78,6 @@ public class LaserLauncher : MonoBehaviour
                 break;
             case 1:
                 print("Triple Shot");
-                //_pooledLaser = _pooledTripleShotLaser;
                 _objectPool.Get();
                 break;
         }
@@ -86,7 +85,13 @@ public class LaserLauncher : MonoBehaviour
     }
     private IEnumerator AIFireRoutine()
     {
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(_fireRate);
         _objectPool.Get();
+    }
+
+    private void OnBecameVisible()
+    {
+        _objectPool = new ObjectPool<Laser>(CreateObject,OnGet,OnRelease,OnLaserDestroy,maxSize: _maxPoolSize);
+        StartCoroutine(AIFireRoutine());
     }
 }
