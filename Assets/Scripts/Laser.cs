@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Pool;
 
 public class Laser : MonoBehaviour
 {
@@ -7,6 +8,10 @@ public class Laser : MonoBehaviour
     [SerializeField] protected float _destroyBoundary;
 
     protected Transform _transform;
+
+    protected IObjectPool<Laser> _laserPool;
+
+    protected bool _isVisible = false;
 
     private void Start()
     {
@@ -18,7 +23,7 @@ public class Laser : MonoBehaviour
         _transform.Translate(Vector3.up * (_speed * Time.deltaTime));
         if(_transform.position.y > _destroyBoundary)
         {
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
     }
 
@@ -26,7 +31,23 @@ public class Laser : MonoBehaviour
     {
         if(other.CompareTag("Enemy")|| other.CompareTag("Asteroid"))
         {
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
+    }
+
+    public void SetPool(IObjectPool<Laser> pool)
+    {
+        _laserPool = pool;S
+    }
+
+    protected void OnBecameVisible()
+    {
+        _isVisible = true;
+    }
+
+    protected void OnBecameInvisible()
+    {
+        _isVisible = false;
+       _laserPool.Release(this);
     }
 }

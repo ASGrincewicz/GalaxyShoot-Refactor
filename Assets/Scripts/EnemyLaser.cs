@@ -6,20 +6,18 @@ public class EnemyLaser : Laser
 
     protected override void Update()
     {
+        //if (!_isVisible) return;
         _transform.Translate(Vector3.down * (_speed * Time.deltaTime));
         if (_transform.position.y < _destroyBoundary)
         {
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
     }
 
     protected override void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
-        {
-            Destroy(gameObject);
-           
-            _damageChannel.CallUpdate();
-        }
+        if (!other.CompareTag("Player")) return;
+        _laserPool.Release(this);
+        _damageChannel.CallUpdate();
     }
 }

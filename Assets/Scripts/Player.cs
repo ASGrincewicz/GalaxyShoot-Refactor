@@ -11,18 +11,20 @@ public class Player : MonoBehaviour
     private float _hBoundRight = 9.3f;
     private float _hBoundLeft = -9.3f;
     [SerializeField] private GameObject _laserPrefab, _tripleShotPrefab, _shield;
-    [SerializeField] private Vector3 _laserOffset = new Vector3(0,0.5f,0);
+    //[SerializeField] private Vector3 _laserOffset = new Vector3(0,0.5f,0);
     [SerializeField] private Vector3 _tripleShotOffset = new Vector3(0, -0.5f, 0);
-    [SerializeField] private float _fireRate = 0.5f;
-    private float _canFire = -1.0f;
-    [SerializeField] private int _lives = 3, _fireMode;
+    /*[SerializeField] private float _fireRate = 0.5f;*/
+    /*private float _canFire = -1.0f;*/
+    [SerializeField] private int _lives = 3;
     [SerializeField] private bool _isShieldActive;
-    [SerializeField] [Header("SCORE")] private int _playerScore;
+    //[SerializeField] [Header("SCORE")] private int _playerScore;
     [SerializeField] private GameObject _rightDamage, _leftDamage, _explosion;
     [SerializeField] private AudioClip _laserClip, _powerUpClip, _explosionClip;
     [Header("Channels"), SerializeField] private IntUpdateChannel _scoreUpdateChannel;
     [SerializeField] private IntUpdateChannel _powerUpChannel;
     [SerializeField] private UpdateChannel _damageChannel;
+    [SerializeField] private int _fireMode;
+    public int FireMode => _fireMode;
     private AudioSource _audio;
     private Transform _transform;
     private float _deltaTime;
@@ -56,10 +58,7 @@ public class Player : MonoBehaviour
     {
         _deltaTime = Time.deltaTime;
         Movement();
-        if(Input.GetKeyDown(KeyCode.Space)&& Time.time > _canFire)
-        {
-            Shoot();
-        }
+       
     }
 
     private void Movement()
@@ -71,7 +70,12 @@ public class Player : MonoBehaviour
         ScreenWrap();
     }
 
-    private void Shoot()
+    public void SetFireMode(int fireMode)
+    {
+        _fireMode = fireMode;
+    }
+
+    /*private void Shoot()
     {
         _canFire = Time.time + _fireRate;
         switch(_fireMode)
@@ -84,7 +88,7 @@ public class Player : MonoBehaviour
                 break;
         }
         _audio.PlayOneShot(_laserClip, 10);
-    }
+    }*/
 
     private void Damage()
     {

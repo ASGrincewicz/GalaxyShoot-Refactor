@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7063811576656746512}
   - component: {fileID: 7063811576656746605}
   - component: {fileID: 7063811576656746513}
+  - component: {fileID: 2028217647175470740}
   m_Layer: 9
   m_Name: Player
   m_TagString: Player
@@ -135,13 +136,9 @@ MonoBehaviour:
   _tripleShotPrefab: {fileID: 1270690530218070096, guid: 6ed4d318cba28fe47a3bee93b7c819b2,
     type: 3}
   _shield: {fileID: 7063811578100213547}
-  _laserOffset: {x: 0, y: 1.05, z: 0}
   _tripleShotOffset: {x: 0, y: -0.5, z: 0}
-  _fireRate: 0.25
   _lives: 3
-  _fireMode: 0
   _isShieldActive: 0
-  _playerScore: 0
   _rightDamage: {fileID: 7063811576769416186}
   _leftDamage: {fileID: 7063811576931015283}
   _explosion: {fileID: 3618151420856934090, guid: c6e5e17c98fbc2b4e9082f985d7bb494,
@@ -153,6 +150,7 @@ MonoBehaviour:
     type: 2}
   _powerUpChannel: {fileID: 11400000, guid: 721ab8d6bb6aa1448943f7d789dac4b5, type: 2}
   _damageChannel: {fileID: 11400000, guid: 91e45b6f6454da74c8cd2c6f96679533, type: 2}
+  _fireMode: 0
 --- !u!82 &7063811576656746513
 AudioSource:
   m_ObjectHideFlags: 0
@@ -249,6 +247,24 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &2028217647175470740
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7063811576656746604}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ce02b5c677d4a38a22c8cb2f7fcb83b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isAI: 0
+  _pooledLaser: {fileID: 4928205935405384799, guid: 8b6b2b29bdbe4ca4bb3497c315d4e19f,
+    type: 3}
+  _pooledTripleShotLaser: {fileID: 0}
+  _maxPoolSize: 5
+  _fireRate: 0.3
 --- !u!1 &7063811576769416186
 GameObject:
   m_ObjectHideFlags: 0

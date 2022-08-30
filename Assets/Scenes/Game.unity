@@ -280,7 +280,7 @@ MonoBehaviour:
   _enemyPrefab: {fileID: 2839233689000840284, guid: 99d909ed8a91b4c43979d8dc37fecf54,
     type: 3}
   _enemyContainer: {fileID: 503967270}
-  stopSpawning: 0
+  _stopSpawning: 1
   _powerUps:
   - {fileID: 5906124128423113161, guid: c3ad5e28dc863e04399aec0b2afca66b, type: 3}
   - {fileID: 9164265301882942033, guid: b3ee04fc4826508488244a1ccdd7e0a5, type: 3}
@@ -1446,6 +1446,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2028217647175470740, guid: d1125636be439cd42a3302fd6b4c9b2b,
+        type: 3}
+      propertyPath: _fireRate
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 2028217647175470740, guid: d1125636be439cd42a3302fd6b4c9b2b,
+        type: 3}
+      propertyPath: _maxPoolSize
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 7063811576656746515, guid: d1125636be439cd42a3302fd6b4c9b2b,
         type: 3}
       propertyPath: m_RootOrder
