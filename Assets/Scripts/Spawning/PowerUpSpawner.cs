@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
+using GalaxyShooter.Abilities;
 using UnityEngine;
 using UnityEngine.Pool;
 
-namespace Spawning
+namespace GalaxyShooter.Spawning
 {
     public class PowerUpSpawner: MonoBehaviour
     {

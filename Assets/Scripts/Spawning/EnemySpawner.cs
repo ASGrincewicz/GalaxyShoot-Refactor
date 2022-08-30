@@ -1,7 +1,8 @@
-﻿using UnityEngine;
+﻿using GalaxyShooter.Control;
+using UnityEngine;
 using UnityEngine.Pool;
 
-namespace Spawning
+namespace GalaxyShooter.Spawning
 {
     public class EnemySpawner: MonoBehaviour
     {
