@@ -1,26 +1,24 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
 public class Asteroid : MonoBehaviour
 {
-    [SerializeField]
-    private float _rotationSpeed = 3f;
-    public GameObject asteroidExplosion;
-    
-    void Update()
+    [SerializeField] private float _rotationSpeed = 3f;
+    [SerializeField] private GameObject _asteroidExplosion;
+    public Action OnStartSpawning;
+
+    private void Update()
     {
-       transform.Rotate(Vector3.forward * _rotationSpeed * Time.deltaTime);
+       transform.Rotate(Vector3.forward * (_rotationSpeed * Time.deltaTime));
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.tag == "Laser")
+        if(other.CompareTag("Laser"))
         {
-            GameObject explosion = Instantiate(asteroidExplosion, transform.position, Quaternion.identity);
-            Destroy(this.gameObject);
-           
-            SpawnManager.Instance.StartSpawning();
+            Instantiate(_asteroidExplosion, transform.position, Quaternion.identity);
+            Destroy(gameObject);
+            OnStartSpawning?.Invoke();
         }
     }
 }

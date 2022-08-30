@@ -1,58 +1,51 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    private static UIManager _instance;
-    public static UIManager Instance
-    {
-        get
-        {
-            if(_instance ==null)
-            {
-                Debug.LogError("UIManager is NULL!");
-            }
-            return _instance;
-        }
-    }
     public Text scoreText;
-    [SerializeField]
-    private Image _livesImg;
+    [SerializeField] private Image _livesImg;
+    [SerializeField] private Sprite[] _livesSprite = new Sprite[4];
+    [SerializeField] private GameObject _gameOverText, _restartText;
+    [SerializeField] private IntUpdateChannel _scoreUpdateChannel;
     private int _currentScore;
-    [SerializeField]
-    private Sprite[] _livesSprite = new Sprite[4];
-    [SerializeField]
-    private GameObject _gameOverText, _restartText;
-    void Awake()
+    private Player _player;
+    
+    private void OnEnable()
     {
-        _instance = this;
+        _player = FindObjectOfType<Player>();
+        _player.OnPlayerDamaged += UpdateLives;
+        _scoreUpdateChannel.OnIntUpdate += UpdateScore;
     }
 
-    // Update is called once per frame
-    void Start()
+    private void OnDisable()
     {
-        scoreText.text = "SCORE: " + 0;
+        _player.OnPlayerDamaged -= UpdateLives;
+        _scoreUpdateChannel.OnIntUpdate -= UpdateScore;
     }
-    public void UpdateScore(int points)
+
+
+    private void Start()
     {
-        _currentScore = points;
-        scoreText.text = "SCORE: " + _currentScore;
+        scoreText.text = $"SCORE: {0}";
     }
-    public void UpdateLives(int currentLives)
+    private void UpdateScore(int points)
+    {
+        _currentScore += points;
+        scoreText.text = $"SCORE: {_currentScore}";
+    }
+    private void UpdateLives(int currentLives)
     {
         _livesImg.sprite = _livesSprite[currentLives];
         if (currentLives == 0)
         {
-            _restartText.SetActive(true); 
-            GameManager.Instance._gameOver = true;
+            _restartText.SetActive(true);
             StartCoroutine(GameOverFlicker());
-           
         }
     }
-    
-   public IEnumerator GameOverFlicker()
+
+    private IEnumerator GameOverFlicker()
     {
         while (true)
         {
@@ -61,6 +54,5 @@ public class UIManager : MonoBehaviour
             _gameOverText.SetActive(false);
             yield return new WaitForSeconds(0.75f);
         }
-
     }
 }

@@ -1,32 +1,32 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    private static GameManager _instance;
-    public static GameManager Instance
+    [SerializeField] private bool _gameOver;
+    private Player _player;
+
+    private void OnEnable()
     {
-        get
-        {
-            if (_instance == null)
-            {
-                Debug.LogError("Game Manager is Null!");
-            }
-            return _instance;
-        }
+        _player = FindObjectOfType<Player>();
+        _player.OnPlayerDeath += OnPlayerDeath;
     }
-    public bool _gameOver;
-    void Awake()
+
+    private void OnDisable()
     {
-        _instance = this;
+        _player.OnPlayerDeath -= OnPlayerDeath;
     }
-    void Update()
+
+    private void OnPlayerDeath()
     {
-        if(Input.GetKeyDown(KeyCode.R)&& _gameOver == true)
+        _gameOver = true;
+    }
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.R)&& _gameOver)
         {
-            SceneManager.LoadScene(1);
+            SceneManager.LoadSceneAsync(1);
         }
         if(Input.GetKeyDown(KeyCode.Escape))
         {

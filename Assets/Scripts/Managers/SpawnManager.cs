@@ -1,49 +1,45 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class SpawnManager : MonoBehaviour
 {
-    private static SpawnManager _instance;
-    public static SpawnManager Instance
-    {
-        get
-        {
-            if (_instance == null)
-            {
-                Debug.LogError("SpawnManager is NULL!");
-            }
-            return _instance;
-        }
-    }
-    [SerializeField]
-    private GameObject _enemyPrefab, _enemyContainer;
+    [SerializeField] private GameObject _enemyPrefab, _enemyContainer;
 
-    public bool stopSpawning = true;
-    [SerializeField]
-    private GameObject[] _powerUps = new GameObject[3];
-    
-    void Awake()
+    [SerializeField] private bool _stopSpawning = true;
+    [SerializeField] private GameObject[] _powerUps = new GameObject[3];
+    private Asteroid _asteroid;
+    private Player _player;
+
+    private void OnEnable()
     {
-        _instance = this;
+        _player = FindObjectOfType<Player>();
+        _player.OnPlayerDeath += OnPlayerDeath;
+        _asteroid = FindObjectOfType<Asteroid>();
+        _asteroid.OnStartSpawning += StartSpawning;
     }
-    void Start()
+
+    private void OnDisable()
     {
-        
+        _player.OnPlayerDeath -= OnPlayerDeath;
+        _asteroid.OnStartSpawning -= StartSpawning;
+
     }
-    public void OnPlayerDeath()
+    private void OnPlayerDeath()
     {
-        stopSpawning = true;
+        _stopSpawning = true;
     }
-    public void StartSpawning()
+
+    private void StartSpawning()
     {
-        stopSpawning = false;
+        _stopSpawning = false;
         StartCoroutine(SpawnRoutine());
         StartCoroutine(PowerUpRoutine());
     }
-    IEnumerator SpawnRoutine()
+
+    private IEnumerator SpawnRoutine()
     {
-        while (stopSpawning == false)
+        while (!_stopSpawning)
         {
             Vector3 posToSpawn = new Vector3(Random.Range(-8, 8), 6, 0);
             GameObject newEnemy = Instantiate(_enemyPrefab, posToSpawn, Quaternion.identity);
@@ -51,12 +47,13 @@ public class SpawnManager : MonoBehaviour
             yield return new WaitForSeconds(5f);
         }
     }
-    IEnumerator PowerUpRoutine()
+
+    private IEnumerator PowerUpRoutine()
     {
-        while (stopSpawning == false)
+        while (!_stopSpawning)
         {
             Vector3 posToSpawn = new Vector3(Random.Range(-8, 8), 6, 0);
-            Instantiate(_powerUps[(Random.Range(0,3))], posToSpawn, Quaternion.identity);
+            Instantiate(_powerUps[Random.Range(0,3)], posToSpawn, Quaternion.identity);
             yield return new WaitForSeconds(Random.Range(5, 7));
         }
     }

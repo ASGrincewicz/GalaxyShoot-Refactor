@@ -1,33 +1,32 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Laser : MonoBehaviour
 {
-    [SerializeField]
-    private float _speed = 8f;
+    [SerializeField] protected float _speed = 8f;
     
-    void Update()
+    [SerializeField] protected float _destroyBoundary;
+
+    protected Transform _transform;
+
+    private void Start()
     {
-        transform.Translate(Vector3.up * _speed * Time.deltaTime);
-        if(transform.position.y > 5)
+        _transform = transform;
+    }
+
+    protected virtual void Update()
+    {
+        _transform.Translate(Vector3.up * (_speed * Time.deltaTime));
+        if(_transform.position.y > _destroyBoundary)
         {
-            Destroy(this.gameObject);
-            if (this.transform.parent != null)
-            {
-                Destroy(transform.parent.gameObject);
-            }
+            Destroy(gameObject);
         }
     }
-    void OnTriggerEnter2D(Collider2D other)
+
+    protected virtual void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.tag == "Enemy"|| other.tag== "Asteroid")
+        if(other.CompareTag("Enemy")|| other.CompareTag("Asteroid"))
         {
-            Destroy(this.gameObject);
-            if (this.transform.parent != null)
-            {
-                Destroy(transform.parent.gameObject);
-            }
+            Destroy(gameObject);
         }
     }
 }

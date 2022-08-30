@@ -1,34 +1,25 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class EnemyLaser : MonoBehaviour
+public class EnemyLaser : Laser
 {
-    [SerializeField]
-    private float _speed = 6f;
-    
-    void Update()
+    [SerializeField] private UpdateChannel _damageChannel;
+
+    protected override void Update()
     {
-        transform.Translate(Vector3.down * _speed * Time.deltaTime);
-        if (transform.position.y < -5)
+        _transform.Translate(Vector3.down * (_speed * Time.deltaTime));
+        if (_transform.position.y < _destroyBoundary)
         {
-            Destroy(this.gameObject);
-            if (this.transform.parent != null)
-            {
-                Destroy(transform.parent.gameObject);
-            }
+            Destroy(gameObject);
         }
     }
-    void OnTriggerEnter2D(Collider2D other)
+
+    protected override void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.tag == "Player")
+        if (other.CompareTag("Player"))
         {
-            Destroy(this.gameObject);
-            if (this.transform.parent != null)
-            {
-                Destroy(transform.parent.gameObject);
-            }
-            Player.Instance.Damage();
+            Destroy(gameObject);
+           
+            _damageChannel.CallUpdate();
         }
     }
 }

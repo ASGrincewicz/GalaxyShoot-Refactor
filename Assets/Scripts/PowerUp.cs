@@ -1,27 +1,26 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PowerUp : MonoBehaviour
 {
-    private float _speed = 2.5f;
-    [SerializeField]
-    private int _powerUpID;
-    
-    void Update()
+    [SerializeField] private float _speed = 2.5f;
+    [SerializeField] private int _powerUpID;
+    [SerializeField] private IntUpdateChannel _powerUpChannel;
+
+    private void Update()
     {
-        transform.Translate(Vector3.down * _speed * Time.deltaTime);
+        transform.Translate(Vector3.down * (_speed * Time.deltaTime));
         if (transform.position.y < -6)
         {
-            Destroy(this.gameObject);
+            Destroy(gameObject);
         }
     }
-    void OnTriggerEnter2D(Collider2D other)
+
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.tag == "Player")
+        if(other.CompareTag("Player"))
         {
-            Player.Instance.PowerUp(_powerUpID);
-            Destroy(this.gameObject);
+            _powerUpChannel.CallIntUpdate(_powerUpID);
+            Destroy(gameObject);
         }
     }
 }
