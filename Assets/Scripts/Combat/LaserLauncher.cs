@@ -14,6 +14,8 @@ namespace GalaxyShooter.Combat
         [SerializeField] private Transform _laserContainer;
         [SerializeField] private int _maxPoolSize = 10;
         [SerializeField] private float _fireRate = 0.5f;
+        [SerializeField] private Transform _fireOffset;
+        private float _defaultFireRate;
         private IObjectPool<Laser> _objectPool;
         private float _canFire = -1.0f;
         private Player _player;
@@ -36,7 +38,12 @@ namespace GalaxyShooter.Combat
 
         private void Start()
         {
-            StartCoroutine(AIFireRoutine());
+
+            if (_isAI)
+            {
+                StartCoroutine(AIFireRoutine());
+            }
+            _defaultFireRate = _fireRate;
         }
 
         private void Update()
@@ -58,8 +65,9 @@ namespace GalaxyShooter.Combat
 
         private void OnGet(Laser laser)
         {
-            laser.transform.MatchPosition(this.gameObject);
-            laser.transform.OffsetPosition(new Vector3(0, 0.5f, 0));
+            Vector3 offset = new Vector3(_fireOffset.localPosition.x, _fireOffset.localPosition.y, 0);
+            laser.transform.MatchPosition(gameObject);
+            laser.transform.OffsetPosition(offset);
             laser.gameObject.SetActive(true);
         }
 
@@ -80,10 +88,11 @@ namespace GalaxyShooter.Combat
             switch (_player.FireMode)
             {
                 case 0:
+                    _fireRate = _defaultFireRate;
                     _objectPool.Get();
                     break;
                 case 1:
-                    print("Triple Shot");
+                    _fireRate = _fireRate / 2;
                     _objectPool.Get();
                     break;
             }

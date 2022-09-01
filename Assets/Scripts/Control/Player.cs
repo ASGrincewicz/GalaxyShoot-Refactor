@@ -8,21 +8,22 @@ namespace GalaxyShooter.Control
     public class Player : MonoBehaviour
     {
         [SerializeField] private float _speed = 5;
-        private float _vBoundTop = 0f;
-        private float _vBoundBottom = -4f;
-        private float _hBoundRight = 9.3f;
-        private float _hBoundLeft = -9.3f;
-        [SerializeField] private AudioClip _laserClip, _powerUpClip, _explosionClip;
+        [SerializeField] private AudioClip _laserClip;
+        [SerializeField] private AudioClip _powerUpClip;
+        [SerializeField] private AudioClip _explosionClip;
         [SerializeField] private IntUpdateChannel _powerUpChannel;
-        [SerializeField] private int _fireMode;
+        private int _fireMode;
         public int FireMode => _fireMode;
+        private Transform _transform;
         private AudioSource _audio;
         private Animator _animator;
-        private int _animatorHInputParameter = Animator.StringToHash("horizontalInput");
-        private Transform _transform;
-        private float _deltaTime;
+        private readonly int _animatorHInputParameter = Animator.StringToHash("horizontalInput");
         private readonly float _powerUpCooldownTime = 5.0f;
-
+        private const float _vBoundTop = 0f;
+        private const float _vBoundBottom = -4f;
+        private const float _hBoundRight = 9.3f;
+        private const float _hBoundLeft = -9.3f;
+        private float _deltaTime;
         private WaitForSeconds _powerUpDelay;
 
         private void OnEnable()
@@ -39,9 +40,16 @@ namespace GalaxyShooter.Control
         {
             _transform = transform;
             _transform.position = new Vector3(0, -4, 0);
-            TryGetComponent(out _audio);
-            TryGetComponent(out _animator);
             _powerUpDelay = new WaitForSeconds(_powerUpCooldownTime);
+            if(!TryGetComponent(out _audio))
+            {
+               Debug.LogError("Audio source not found."); 
+            }
+
+            if (!TryGetComponent(out _animator))
+            {
+                Debug.LogError("Animator not found.");
+            }
         }
 
         private void Update()
