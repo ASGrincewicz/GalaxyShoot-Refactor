@@ -50,6 +50,8 @@ namespace GalaxyShooter.Control
         {
             if (other.CompareTag("Player") || other.CompareTag("Laser")) //Updated way to check tags.
             {
+                // Cached the animator parameter by converting to an int with the animator's
+                //StringToHash method.
                 _anim.SetTrigger(_animatorTrigger);
                 _audio.PlayOneShot(_explosionClip);
                 _speed = 0;
