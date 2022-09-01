@@ -36,25 +36,27 @@ namespace GalaxyShooter.Control
             Movement();
         }
 
-        public void SetPool(IObjectPool<Enemy> pool)
+        public void SetPool(IObjectPool<Enemy> pool)// Using Unity's Pooling API
         {
             _enemyPool = pool;
         }
 
         private void Movement()
         {
-            transform.MoveDown(_speed);
+            transform.MoveDown(_speed); //Here is an extension method I create for the Transform Component
         }
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            if (other.CompareTag("Player") || other.CompareTag("Laser"))
+            if (other.CompareTag("Player") || other.CompareTag("Laser")) //Updated way to check tags.
             {
                 _anim.SetTrigger(_animatorTrigger);
                 _audio.PlayOneShot(_explosionClip);
                 _speed = 0;
-                TryGetComponent(out Collider2D col);
-                col.enabled = false;
+                if (TryGetComponent(out Collider2D col)) // Updated way to check a component.
+                {
+                    col.enabled = false;
+                }
                 _scoreUpdateChannel.CallIntUpdate(_pointValue);
                 gameObject.SetActive(false);
 
